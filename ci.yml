@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - lab-4
+      - lab-5
   pull_request:
     branches:
-      - lab-4
+      - lab-5
 
 jobs:
   build:
@@ -21,7 +21,7 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Build and test
+      - name: Build and test .NET
         run: |
           dotnet build
           dotnet test
