@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - lab-5
+  pull_request:
+    branches:
+      - lab-5
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Build and test
+        run: |
+          dotnet build
+          dotnet test
+
+      - name: Build Docker image
+        run: |
+          docker build -t memorytestslab .
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: |
+          docker tag memorytestslab ghcr.io/${{ github.repository_owner }}/memorytestslab:latest
+          docker push ghcr.io/${{ github.repository_owner }}/memorytestslab:latest
+
+      - name: Test Docker image
+        run: |
+          docker pull ghcr.io/${{ github.repository_owner }}/memorytestslab:latest
+          docker run --rm ghcr.io/${{ github.repository_owner }}/memorytestslab:latest
