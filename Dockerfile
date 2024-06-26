@@ -13,6 +13,8 @@ RUN dotnet restore
 WORKDIR /app
 COPY . .
 
+RUN chmod -R 777 /app
+
 WORKDIR /app/lab3
 RUN dotnet publish -c Release -o out
 
