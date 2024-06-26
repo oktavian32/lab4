@@ -10,10 +10,8 @@ on:
 
 jobs:
   build:
+    permissions: write-all
     runs-on: ubuntu-latest
-    permissions:
-        contents: read
-        packages: write
 
     steps:
       - name: Checkout code
@@ -24,7 +22,7 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Build and test .NET
+      - name: Build and test
         run: |
           dotnet build
           dotnet test
